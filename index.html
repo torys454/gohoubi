@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ごほうび解禁！</title>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-main: #f9e0e3;
+    --bg-card: #fff1f4;
+    --pink-light: #f7d1d4;
+    --pink-mid: #e8a0a8;
+    --pink-deep: #d4737e;
+    --pink-dark: #c25565;
+    --gold: #b5a497;
+    --gold-light: #d4c4b0;
+    --gold-bright: #c9b8a4;
+    --cream: #fef9f5;
+    --text-dark: #5a3a3f;
+    --text-mid: #8a6a6f;
+    --text-light: #b89a9f;
+    --dream-pink: #ff7eb3;
+    --dream-purple: #c77dff;
+    --dream-blue: #7ec8e3;
+    --dream-mint: #98e4c8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    background: var(--bg-main);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(212,115,126,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(181,164,151,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(var(--pink-light) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== ヘッダー ===== */
+  .header {
+    text-align: center;
+    padding: 32px 20px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-deco {
+    display: inline-block;
+    position: relative;
+  }
+
+  .header-deco::before,
+  .header-deco::after {
+    content: '✿';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    color: var(--pink-mid);
+    opacity: 0.7;
+  }
+  .header-deco::before { left: -40px; }
+  .header-deco::after { right: -40px; }
+
+  .header h1 {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 2.2em;
+    color: var(--pink-deep);
+    text-shadow: 2px 2px 0 rgba(181,164,151,0.3);
+    letter-spacing: 0.05em;
+  }
+
+  .header p {
+    margin-top: 8px;
+    color: var(--text-mid);
+    font-size: 0.9em;
+    font-weight: 700;
+  }
+
+  /* ===== メインコンテナ ===== */
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== カード共通 ===== */
+  .card {
+    background: var(--bg-card);
+    border: 2px solid var(--pink-light);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(212,115,126,0.08);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px; right: -1px; bottom: -1px;
+    border-radius: 20px;
+    border: 1px dashed var(--gold-light);
+    pointer-events: none;
+    opacity: 0.5;
+    margin: 4px;
+  }
+
+  .card h2 {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 1.25em;
+    margin-bottom: 16px;
+    color: var(--pink-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  .card h2 .icon {
+    font-size: 1.2em;
+  }
+
+  /* ===== 入力フォーム ===== */
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85em;
+    color: var(--text-mid);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #fff;
+    border: 2px solid var(--pink-light);
+    border-radius: 12px;
+    color: var(--text-dark);
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .form-group input:focus {
+    border-color: var(--pink-mid);
+    box-shadow: 0 0 0 4px rgba(232,160,168,0.15);
+  }
+
+  .form-group input::placeholder {
+    color: var(--text-light);
+  }
+
+  /* ===== 画像 or 絵文字選択 ===== */
+  .visual-chooser {
+    margin-bottom: 14px;
+  }
+
+  .visual-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid var(--pink-light);
+  }
+
+  .visual-tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    background: #fff;
+    border: none;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .visual-tab.active {
+    background: var(--pink-light);
+    color: var(--pink-dark);
+  }
+
+  .visual-tab + .visual-tab {
+    border-left: 2px solid var(--pink-light);
+  }
+
+  .visual-panel {
+    display: none;
+  }
+
+  .visual-panel.active {
+    display: block;
+  }
+
+  .image-upload-area {
+    border: 2px dashed var(--pink-light);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .image-upload-area:hover {
+    border-color: var(--pink-mid);
+    background: rgba(255,241,244,0.8);
+  }
+
+  .image-upload-area .upload-icon { font-size: 2em; margin-bottom: 6px; }
+  .image-upload-area .upload-text { font-size: 0.8em; color: var(--text-mid); }
+  .image-upload-area input[type="file"] {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .image-preview {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+
+  /* 絵文字グリッド */
+  .emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .emoji-option {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 2px solid var(--pink-light);
+    border-radius: 10px;
+    background: #fff;
+    font-size: 1.6em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .emoji-option:hover {
+    border-color: var(--pink-mid);
+    transform: scale(1.1);
+  }
+
+  .emoji-option.selected {
+    border-color: var(--pink-deep);
+    background: var(--pink-light);
+    box-shadow: 0 0 10px rgba(212,115,126,0.3);
+    transform: scale(1.1);
+  }
+
+  /* ===== ボタン ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 700;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--pink-deep), var(--pink-dark));
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(212,115,126,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(212,115,126,0.4);
+  }
+
+  .btn-achieve {
+    background: linear-gradient(135deg, var(--dream-pink), var(--dream-purple));
+    color: #fff;
+    font-family: 'Kaisei Decol', serif;
+    font-size: 1.2em;
+    padding: 18px;
+    box-shadow: 0 4px 20px rgba(255,126,179,0.3);
+    border: 3px solid rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
+  }
+
+  .btn-achieve:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(255,126,179,0.5);
+  }
+
+  .btn-achieve:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-achieve:not(:disabled) {
+    animation: dreamPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes dreamPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255,126,179,0.3); }
+    50% { box-shadow: 0 4px 35px rgba(199,125,255,0.5), 0 0 50px rgba(255,126,179,0.2); }
+  }
+
+  /* ===== 目標リスト ===== */
+  .goal-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: #fff;
+    border: 2px solid var(--pink-light);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .goal-item.completed {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(181,164,151,0.05), rgba(254,249,245,0.8));
+  }
+
+  .goal-check {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--pink-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    background: #fff;
+    color: transparent;
+  }
+
+  .goal-check:hover {
+    border-color: var(--pink-mid);
+    box-shadow: 0 0 8px rgba(232,160,168,0.3);
+  }
+
+  .goal-item.completed .goal-check {
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+    border-color: var(--gold);
+    color: #fff;
+    font-weight: 900;
+  }
+
+  .goal-text { flex: 1; font-size: 0.95em; font-weight: 700; }
+
+  .goal-item.completed .goal-text {
+    text-decoration: line-through;
+    color: var(--text-light);
+  }
+
+  .goal-delete {
+    background: none;
+    border: none;
+    color: var(--pink-light);
+    cursor: pointer;
+    font-size: 1.3em;
+    padding: 4px;
+    transition: all 0.3s;
+    line-height: 1;
+  }
+
+  .goal-delete:hover { color: var(--pink-deep); }
+
+  /* ===== ご褒美表示（設定後） ===== */
+  .reward-display {
+    text-align: center;
+    padding: 20px;
+    border: 2px dashed var(--pink-light);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    background: rgba(255,255,255,0.5);
+  }
+
+  .reward-display .reward-visual {
+    font-size: 3em;
+    margin-bottom: 8px;
+  }
+
+  .reward-display .reward-visual img {
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 12px;
+    object-fit: contain;
+    border: 2px solid var(--pink-light);
+  }
+
+  .reward-display .reward-name {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 1.2em;
+    color: var(--pink-dark);
+  }
+
+  /* ===== プログレスバー ===== */
+  .progress-section { margin-bottom: 20px; }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85em;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .progress-bar {
+    height: 16px;
+    background: #fff;
+    border: 2px solid var(--pink-light);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--dream-pink), var(--dream-purple), var(--dream-blue), var(--dream-mint));
+    background-size: 200% 100%;
+    border-radius: 8px;
+    transition: width 0.5s ease;
+    position: relative;
+    animation: dreamShimmer 3s linear infinite;
+  }
+
+  @keyframes dreamShimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  /* ===== 達成演出オーバーレイ ===== */
+  .celebration-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(249,224,227,0.95);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .celebration-overlay.active {
+    display: flex;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .marquee-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 12px 0;
+    position: absolute;
+    top: 50px;
+    background: linear-gradient(180deg, rgba(212,115,126,0.1), transparent);
+  }
+
+  .marquee-text {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 1.6em;
+    white-space: nowrap;
+    animation: marquee 8s linear infinite;
+    color: var(--pink-deep);
+    text-shadow: 1px 1px 0 var(--gold-light);
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(100vw); }
+    100% { transform: translateX(-200%); }
+  }
+
+  .congrats-text {
+    text-align: center;
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+  }
+
+  .congrats-text.show { opacity: 1; transform: scale(1); }
+
+  .congrats-main {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 2.2em;
+    color: var(--pink-dark);
+    text-shadow: 2px 2px 0 var(--gold-light);
+    display: block;
+  }
+
+  .congrats-sub {
+    font-size: 1em;
+    color: var(--text-mid);
+    display: block;
+    margin-top: 8px;
+    font-weight: 700;
+  }
+
+  /* メダル */
+  .reward-medal-zone {
+    position: relative;
+    z-index: 10;
+    margin-top: 10px;
+  }
+
+  .reward-medal-wrapper {
+    opacity: 0;
+    transform: translateY(-300px);
+    transition: all 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .reward-medal-wrapper.dropped {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .medal-ribbon {
+    width: 8px;
+    height: 60px;
+    background: linear-gradient(180deg, var(--pink-mid), var(--pink-light));
+    border-radius: 4px;
+    margin-bottom: -6px;
+    z-index: 1;
+  }
+
+  .medal-body {
+    position: relative;
+    width: 240px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .medal-shape {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .medal-shape-fill {
+    fill: var(--pink-light);
+    filter: drop-shadow(0 4px 15px rgba(212,115,126,0.2));
+  }
+
+  .medal-dots {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .medal-dot {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--pink-mid);
+    animation: dotBlink 0.8s ease-in-out infinite alternate;
+  }
+
+  @keyframes dotBlink {
+    0% { background: var(--pink-mid); transform: scale(1); box-shadow: 0 0 4px rgba(212,115,126,0.3); }
+    100% { background: var(--gold); transform: scale(1.2); box-shadow: 0 0 12px rgba(181,164,151,0.6); }
+  }
+
+  .medal-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .medal-content .medal-title {
+    font-family: 'Kaisei Decol', serif;
+    font-size: 1.15em;
+    color: var(--text-dark);
+    line-height: 1.4;
+  }
+
+  .reward-action-btn {
+    margin-top: 24px;
+    background: linear-gradient(135deg, var(--dream-pink), var(--dream-purple));
+    color: #fff;
+    border: 3px solid rgba(255,255,255,0.5);
+    padding: 18px 40px;
+    border-radius: 16px;
+    font-family: 'Kaisei Decol', serif;
+    font-size: 1.3em;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(255,126,179,0.4);
+    transition: all 0.3s;
+    animation: dreamBtnPulse 1.5s ease-in-out infinite;
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  .reward-action-btn.show {
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .reward-action-btn:hover { transform: scale(1.08); }
+
+  @keyframes dreamBtnPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255,126,179,0.4); }
+    50% { box-shadow: 0 4px 35px rgba(199,125,255,0.6), 0 0 50px rgba(255,126,179,0.3); }
+  }
+
+  .trumpet-left, .trumpet-right {
+    position: absolute;
+    bottom: 80px;
+    font-size: 3em;
+    opacity: 0;
+    z-index: 5;
+  }
+
+  .trumpet-left {
+    left: -60px;
+    transform: rotate(30deg) scaleX(-1);
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .trumpet-right {
+    right: -60px;
+    transform: rotate(-30deg);
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .trumpet-left.show {
+    opacity: 1;
+    left: 20px;
+    animation: trumpetBounce 0.6s ease-in-out infinite alternate;
+  }
+
+  .trumpet-right.show {
+    opacity: 1;
+    right: 20px;
+    animation: trumpetBounceR 0.6s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes trumpetBounce {
+    0% { transform: rotate(30deg) scaleX(-1) translateY(0); }
+    100% { transform: rotate(35deg) scaleX(-1) translateY(-8px); }
+  }
+
+  @keyframes trumpetBounceR {
+    0% { transform: rotate(-30deg) translateY(0); }
+    100% { transform: rotate(-35deg) translateY(-8px); }
+  }
+
+  .music-note {
+    position: absolute;
+    font-size: 1.5em;
+    color: var(--gold);
+    pointer-events: none;
+    opacity: 0;
+    animation: noteFloat 2s ease-out forwards;
+    z-index: 6;
+  }
+
+  @keyframes noteFloat {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(-120px) rotate(20deg); }
+  }
+
+  .confetti {
+    position: fixed;
+    top: -10px;
+    z-index: 1001;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  .close-celebration {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #fff;
+    border: 2px solid var(--pink-light);
+    color: var(--text-mid);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    z-index: 20;
+  }
+
+  .close-celebration:hover {
+    border-color: var(--pink-deep);
+    color: var(--pink-deep);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-light);
+    font-size: 0.9em;
+  }
+
+  .empty-state .empty-icon { font-size: 2em; margin-bottom: 10px; }
+
+  .btn-reset {
+    background: #fff;
+    border: 2px solid var(--pink-light);
+    color: var(--text-light);
+    font-size: 0.8em;
+    padding: 10px 20px;
+    margin-top: 10px;
+  }
+
+  .btn-reset:hover {
+    border-color: var(--pink-mid);
+    color: var(--pink-deep);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-light);
+    font-size: 0.75em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .sparkle {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1002;
+  }
+
+  .sparkle-star {
+    font-size: 1.2em;
+    animation: sparkleAnim 0.8s ease-out forwards;
+  }
+
+  @keyframes sparkleAnim {
+    0% { opacity: 1; transform: scale(0) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+    100% { opacity: 0; transform: scale(0.5) rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== ヘッダー ===== -->
+<div class="header">
+  <div class="header-deco">
+    <h1>ごほうび解禁！</h1>
+  </div>
+  <p>がんばった自分に、とっておきのごほうびを</p>
+</div>
+
+<!-- ===== メインコンテナ ===== -->
+<div class="container">
+
+  <!-- ご褒美設定カード -->
+  <div class="card" id="rewardCard">
+    <h2><span class="icon">🎁</span> ごほうび設定</h2>
+    <div id="rewardDisplay" class="reward-display" style="display:none;"></div>
+    <div id="rewardForm">
+      <div class="form-group">
+        <label>ごほうびの名前</label>
+        <input type="text" id="rewardName" placeholder="例：ワイヤレスイヤホン">
+      </div>
+      <div class="form-group">
+        <label>AmazonのURL（なくてもOK！）</label>
+        <input type="url" id="rewardUrl" placeholder="https://www.amazon.co.jp/...">
+      </div>
+
+      <div class="visual-chooser">
+        <label style="display:block;font-size:0.85em;color:var(--text-mid);margin-bottom:6px;font-weight:700;">ごほうびのアイコン（どちらかでOK！）</label>
+        <div class="visual-tabs">
+          <button class="visual-tab active" onclick="switchVisualTab('emoji')">絵文字で選ぶ</button>
+          <button class="visual-tab" onclick="switchVisualTab('image')">画像をアップ</button>
+        </div>
+
+        <div class="visual-panel active" id="panelEmoji">
+          <div class="emoji-grid">
+            <button class="emoji-option" onclick="selectEmoji(this)">👜</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">👠</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">💄</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">💍</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">🎧</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">📱</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">🍰</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">🍫</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">🍷</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">☕</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">✈️</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">🏖️</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">💐</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">🧸</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">📚</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">🎮</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">💎</button>
+            <button class="emoji-option" onclick="selectEmoji(this)">🎀</button>
+          </div>
+        </div>
+
+        <div class="visual-panel" id="panelImage">
+          <div class="image-upload-area" id="imageUploadArea">
+            <div id="imageUploadContent">
+              <div class="upload-icon">📷</div>
+              <div class="upload-text">タップして画像を選択<br>（Amazonのスクショなど）</div>
+            </div>
+            <input type="file" id="rewardImage" accept="image/*" onchange="previewImage(this)">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="setReward()">🎀 ごほうびを設定する</button>
+    </div>
+  </div>
+
+  <!-- 目標設定カード -->
+  <div class="card">
+    <h2><span class="icon">🎯</span> 目標リスト</h2>
+    <div class="form-group" style="display:flex;gap:8px;">
+      <input type="text" id="goalInput" placeholder="目標を入力してね..." style="flex:1;" onkeydown="if(event.key==='Enter')addGoal()">
+      <button class="btn btn-primary" onclick="addGoal()" style="width:auto;padding:12px 20px;">追加</button>
+    </div>
+    <div id="goalList">
+      <div class="empty-state">
+        <div class="empty-icon">🎯</div>
+        目標を追加してみよう！
+      </div>
+    </div>
+  </div>
+
+  <!-- プログレス＆達成カード -->
+  <div class="card">
+    <h2><span class="icon">⚡</span> 達成状況</h2>
+    <div class="progress-section">
+      <div class="progress-label">
+        <span id="progressText">0 / 0 達成</span>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+    <button class="btn btn-achieve" id="unlockBtn" onclick="triggerCelebration()" disabled>
+      🔒 まず目標を追加しよう
+    </button>
+  </div>
+
+  <button class="btn btn-reset" onclick="resetAll()">🔄 すべてリセットして新しいごほうびを設定する</button>
+</div>
+
+<div class="footer">
+  ごほうび解禁！ v3.0 — 昭和新レトロ ✿ がんばる自分に、最高のごほうびを。
+</div>
+
+<!-- ===== 達成演出オーバーレイ ===== -->
+<div class="celebration-overlay" id="celebrationOverlay">
+  <button class="close-celebration" onclick="closeCelebration()">✕</button>
+
+  <div class="marquee-container">
+    <div class="marquee-text">
+      🎀 CONGRATULATIONS!! 🎀 全目標達成おめでとう！！ ✿ あなたは最高！！ 🎀 CONGRATULATIONS!! 🎀 全目標達成おめでとう！！ ✿
+    </div>
+  </div>
+
+  <div class="congrats-text" id="congratsText">
+    <span class="congrats-main">🏆 全目標達成！！ 🏆</span>
+    <span class="congrats-sub">おめでとー！！よく頑張った ✿</span>
+  </div>
+
+  <div class="reward-medal-zone">
+    <div class="reward-medal-wrapper" id="rewardMedalWrapper">
+      <div class="medal-ribbon"></div>
+      <div class="medal-body">
+        <svg class="medal-shape" viewBox="0 0 240 220">
+          <path class="medal-shape-fill" d="
+            M120,20
+            C145,20 160,35 168,55
+            C185,40 210,45 218,65
+            C230,85 225,110 210,125
+            C225,145 220,165 200,180
+            C180,195 155,200 120,200
+            C85,200 60,195 40,180
+            C20,165 15,145 30,125
+            C15,110 10,85 22,65
+            C30,45 55,40 72,55
+            C80,35 95,20 120,20Z
+          "/>
+        </svg>
+        <div class="medal-dots" id="medalDots"></div>
+        <div class="medal-content">
+          <div class="medal-title" id="medalTitle">おめでとー！！<br>よく頑張った</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trumpet-left" id="trumpetLeft">🎺</div>
+    <div class="trumpet-right" id="trumpetRight">🎺</div>
+
+    <button class="reward-action-btn" id="rewardActionBtn" onclick="openReward()">
+      🎁 ごほうび解禁！
+    </button>
+  </div>
+</div>
+
+<script>
+  // ===== データ管理 =====
+  let appData = loadData();
+  let rewardImageData = null;
+  let selectedEmoji = null;
+
+  function getDefaultData() {
+    return { reward: null, goals: [] };
+  }
+
+  function loadData() {
+    try {
+      const saved = localStorage.getItem('gohoubi-app-v3');
+      if (saved) {
+        const d = JSON.parse(saved);
+        rewardImageData = localStorage.getItem('gohoubi-app-v3-image');
+        selectedEmoji = d.reward?.emoji || null;
+        return d;
+      }
+    } catch(e) {}
+    return getDefaultData();
+  }
+
+  function saveData() {
+    localStorage.setItem('gohoubi-app-v3', JSON.stringify(appData));
+    if (rewardImageData) {
+      localStorage.setItem('gohoubi-app-v3-image', rewardImageData);
+    } else {
+      localStorage.removeItem('gohoubi-app-v3-image');
+    }
+  }
+
+  // ===== ビジュアルタブ切替 =====
+  function switchVisualTab(tab) {
+    document.querySelectorAll('.visual-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.visual-panel').forEach(p => p.classList.remove('active'));
+    if (tab === 'emoji') {
+      document.querySelectorAll('.visual-tab')[0].classList.add('active');
+      document.getElementById('panelEmoji').classList.add('active');
+    } else {
+      document.querySelectorAll('.visual-tab')[1].classList.add('active');
+      document.getElementById('panelImage').classList.add('active');
+    }
+  }
+
+  // ===== 絵文字選択 =====
+  function selectEmoji(el) {
+    document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedEmoji = el.textContent;
+  }
+
+  // ===== 画像プレビュー =====
+  function previewImage(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        rewardImageData = e.target.result;
+        selectedEmoji = null;
+        document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
+        document.getElementById('imageUploadContent').innerHTML = `<img src="${e.target.result}" class="image-preview">`;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // ===== ご褒美設定 =====
+  function setReward() {
+    const name = document.getElementById('rewardName').value.trim();
+    const url = document.getElementById('rewardUrl').value.trim();
+
+    if (!name) {
+      shakeElement(document.getElementById('rewardName'));
+      return;
+    }
+
+    const displayName = name + ' ごほうび';
+
+    appData.reward = {
+      name: displayName,
+      originalName: name,
+      url,
+      emoji: selectedEmoji,
+      hasImage: !!rewardImageData
+    };
+    saveData();
+    renderReward();
+  }
+
+  function renderReward() {
+    const display = document.getElementById('rewardDisplay');
+    const form = document.getElementById('rewardForm');
+
+    if (appData.reward) {
+      let visualHtml = '';
+      if (rewardImageData) {
+        visualHtml = `<div class="reward-visual"><img src="${rewardImageData}"></div>`;
+      } else if (appData.reward.emoji) {
+        visualHtml = `<div class="reward-visual">${appData.reward.emoji}</div>`;
+      }
+
+      display.innerHTML = `
+        ${visualHtml}
+        <div class="reward-name">🎁 ${escapeHtml(appData.reward.name)}</div>
+      `;
+      display.style.display = 'block';
+      form.style.display = 'none';
+    } else {
+      display.style.display = 'none';
+      form.style.display = 'block';
+    }
+  }
+
+  // ===== 目標管理 =====
+  function addGoal() {
+    const input = document.getElementById('goalInput');
+    const text = input.value.trim();
+    if (!text) { shakeElement(input); return; }
+
+    appData.goals.push({ id: Date.now(), text, completed: false });
+    saveData();
+    input.value = '';
+    renderGoals();
+    updateProgress();
+  }
+
+  function toggleGoal(id) {
+    const goal = appData.goals.find(g => g.id === id);
+    if (goal) {
+      goal.completed = !goal.completed;
+      saveData();
+      renderGoals();
+      updateProgress();
+    }
+  }
+
+  function deleteGoal(id) {
+    appData.goals = appData.goals.filter(g => g.id !== id);
+    saveData();
+    renderGoals();
+    updateProgress();
+  }
+
+  function renderGoals() {
+    const list = document.getElementById('goalList');
+    if (appData.goals.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon">🎯</div>目標を追加してみよう！</div>`;
+      return;
+    }
+    list.innerHTML = appData.goals.map(goal => `
+      <div class="goal-item ${goal.completed ? 'completed' : ''}">
+        <button class="goal-check" onclick="toggleGoal(${goal.id})">${goal.completed ? '✓' : ''}</button>
+        <span class="goal-text">${escapeHtml(goal.text)}</span>
+        <button class="goal-delete" onclick="deleteGoal(${goal.id})">×</button>
+      </div>
+    `).join('');
+  }
+
+  // ===== プログレス管理 =====
+  function updateProgress() {
+    const total = appData.goals.length;
+    const completed = appData.goals.filter(g => g.completed).length;
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    document.getElementById('progressText').textContent = `${completed} / ${total} 達成`;
+    document.getElementById('progressPercent').textContent = `${percent}%`;
+    document.getElementById('progressFill').style.width = `${percent}%`;
+
+    const btn = document.getElementById('unlockBtn');
+    if (total > 0 && completed === total) {
+      btn.disabled = false;
+      btn.innerHTML = '🎀 ごほうびを解禁する！！';
+    } else {
+      btn.disabled = true;
+      const remaining = total - completed;
+      btn.innerHTML = total === 0
+        ? '🔒 まず目標を追加しよう'
+        : `🔒 あと ${remaining} つで解禁！`;
+    }
+  }
+
+  // ===== メダルドット生成 =====
+  function createMedalDots() {
+    const container = document.getElementById('medalDots');
+    container.innerHTML = '';
+    const points = [
+      [120,18],[145,22],[158,38],[168,55],[180,48],[198,46],[212,55],[220,70],
+      [224,90],[222,108],[212,122],[218,140],[212,158],[198,172],[182,184],
+      [164,192],[144,198],[120,200],[96,198],[76,192],[58,184],[42,172],
+      [28,158],[22,140],[28,122],[18,108],[16,90],[20,70],[28,55],
+      [42,46],[60,48],[72,55],[82,38],[95,22]
+    ];
+    points.forEach((p, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'medal-dot';
+      dot.style.left = (p[0] / 240 * 100) + '%';
+      dot.style.top = (p[1] / 220 * 100) + '%';
+      dot.style.transform = 'translate(-50%, -50%)';
+      dot.style.animationDelay = (i * 0.1) + 's';
+      container.appendChild(dot);
+    });
+  }
+
+  // ===== 達成演出 =====
+  function triggerCelebration() {
+    const overlay = document.getElementById('celebrationOverlay');
+    overlay.classList.add('active');
+
+    if (appData.reward) {
+      let emojiPart = appData.reward.emoji ? `<span style="font-size:1.5em;">${appData.reward.emoji}</span><br>` : '';
+      document.getElementById('medalTitle').innerHTML =
+        `${emojiPart}おめでとー！！<br>よく頑張った<br><span style="font-size:0.7em;color:var(--gold);">✿ ${escapeHtml(appData.reward.name)} ✿</span>`;
+    }
+
+    createMedalDots();
+    playFanfare();
+    startConfetti();
+
+    setTimeout(() => {
+      document.getElementById('congratsText').classList.add('show');
+    }, 500);
+
+    setTimeout(() => {
+      document.getElementById('trumpetLeft').classList.add('show');
+      document.getElementById('trumpetRight').classList.add('show');
+      startMusicNotes();
+    }, 1000);
+
+    setTimeout(() => {
+      document.getElementById('rewardMedalWrapper').classList.add('dropped');
+    }, 1500);
+
+    setTimeout(() => {
+      document.getElementById('rewardActionBtn').classList.add('show');
+    }, 3000);
+
+    startSparkles(overlay);
+  }
+
+  function closeCelebration() {
+    const overlay = document.getElementById('celebrationOverlay');
+    overlay.classList.remove('active');
+    document.getElementById('congratsText').classList.remove('show');
+    document.getElementById('rewardMedalWrapper').classList.remove('dropped');
+    document.getElementById('rewardActionBtn').classList.remove('show');
+    document.getElementById('trumpetLeft').classList.remove('show');
+    document.getElementById('trumpetRight').classList.remove('show');
+    document.querySelectorAll('.confetti').forEach(el => el.remove());
+    document.querySelectorAll('.sparkle').forEach(el => el.remove());
+    document.querySelectorAll('.music-note').forEach(el => el.remove());
+  }
+
+  function openReward() {
+    if (appData.reward && appData.reward.url) {
+      window.open(appData.reward.url, '_blank');
+    } else {
+      alert('🎀 おめでとう！ごほうびを楽しんでね！');
+    }
+  }
+
+  // ===== 紙吹雪 =====
+  function startConfetti() {
+    const colors = ['#d4737e','#e8a0a8','#b5a497','#f7d1d4','#c25565','#d4c4b0','#ff7eb3','#c77dff','#fef9f5'];
+    const shapes = ['●','■','♦','✿','★','♥','🎀'];
+    let count = 0;
+    const interval = setInterval(() => {
+      for (let i = 0; i < 4; i++) createConfettiPiece(colors, shapes);
+      count++;
+      if (count > 50) clearInterval(interval);
+    }, 100);
+  }
+
+  function createConfettiPiece(colors, shapes) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = (Math.random() * 14 + 8) + 'px';
+    el.style.color = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+    el.style.animationDelay = Math.random() * 0.5 + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+  }
+
+  // ===== 音符パーティクル =====
+  function startMusicNotes() {
+    const notes = ['♪','♫','♬','🎵','🎶'];
+    let count = 0;
+    const interval = setInterval(() => {
+      createMusicNote(notes, 'left');
+      createMusicNote(notes, 'right');
+      count++;
+      if (count > 15) clearInterval(interval);
+    }, 400);
+  }
+
+  function createMusicNote(notes, side) {
+    const el = document.createElement('div');
+    el.className = 'music-note';
+    el.textContent = notes[Math.floor(Math.random() * notes.length)];
+    const overlay = document.getElementById('celebrationOverlay');
+    el.style.left = side === 'left' ? (10 + Math.random() * 15) + '%' : (75 + Math.random() * 15) + '%';
+    el.style.bottom = (10 + Math.random() * 10) + '%';
+    el.style.animationDelay = (Math.random() * 0.3) + 's';
+    overlay.appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
+
+  // ===== キラキラ =====
+  function startSparkles(container) {
+    const sparkles = ['✦','✧','⭐','✨'];
+    let count = 0;
+    const interval = setInterval(() => {
+      const el = document.createElement('div');
+      el.className = 'sparkle';
+      el.innerHTML = `<span class="sparkle-star" style="color:${Math.random() > 0.5 ? 'var(--gold)' : 'var(--dream-pink)'};">${sparkles[Math.floor(Math.random() * sparkles.length)]}</span>`;
+      el.style.left = (Math.random() * 90 + 5) + '%';
+      el.style.top = (Math.random() * 80 + 10) + '%';
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+      count++;
+      if (count > 40) clearInterval(interval);
+    }, 200);
+  }
+
+  // ===== ファンファーレ =====
+  function playFanfare() {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const notes = [
+        { freq: 523.25, start: 0, dur: 0.15, type: 'triangle' },
+        { freq: 659.25, start: 0.12, dur: 0.15, type: 'triangle' },
+        { freq: 783.99, start: 0.24, dur: 0.15, type: 'triangle' },
+        { freq: 1046.50, start: 0.36, dur: 0.5, type: 'triangle' },
+        { freq: 783.99, start: 0.9, dur: 0.12, type: 'triangle' },
+        { freq: 880.00, start: 1.02, dur: 0.12, type: 'triangle' },
+        { freq: 1046.50, start: 1.14, dur: 0.8, type: 'triangle' },
+      ];
+      const harmony = [
+        { freq: 329.63, start: 0.36, dur: 0.5, type: 'sine' },
+        { freq: 392.00, start: 0.36, dur: 0.5, type: 'sine' },
+        { freq: 392.00, start: 1.14, dur: 0.8, type: 'sine' },
+        { freq: 523.25, start: 1.14, dur: 0.8, type: 'sine' },
+      ];
+      [...notes, ...harmony].forEach(note => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = note.type;
+        osc.frequency.value = note.freq;
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime + note.start);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + note.start + note.dur);
+        osc.start(audioCtx.currentTime + note.start);
+        osc.stop(audioCtx.currentTime + note.start + note.dur + 0.1);
+      });
+    } catch(e) {}
+  }
+
+  // ===== リセット =====
+  function resetAll() {
+    if (confirm('すべてのデータをリセットしますか？')) {
+      appData = getDefaultData();
+      rewardImageData = null;
+      selectedEmoji = null;
+      localStorage.removeItem('gohoubi-app-v3');
+      localStorage.removeItem('gohoubi-app-v3-image');
+      renderReward();
+      renderGoals();
+      updateProgress();
+      document.getElementById('rewardName').value = '';
+      document.getElementById('rewardUrl').value = '';
+      document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
+      document.getElementById('imageUploadContent').innerHTML = `
+        <div class="upload-icon">📷</div>
+        <div class="upload-text">タップして画像を選択<br>（Amazonのスクショなど）</div>
+      `;
+    }
+  }
+
+  // ===== ユーティリティ =====
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function shakeElement(el) {
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = 'shake 0.4s ease';
+    setTimeout(() => el.style.animation = '', 400);
+  }
+
+  const shakeStyle = document.createElement('style');
+  shakeStyle.textContent = `
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+  `;
+  document.head.appendChild(shakeStyle);
+
+  // ===== 初期表示 =====
+  renderReward();
+  renderGoals();
+  updateProgress();
+</script>
+</body>
+</html>
